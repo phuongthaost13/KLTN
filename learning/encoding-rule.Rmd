@@ -1,0 +1,15 @@
+---
+title: "Quy tắc encoding"
+author: "Phạm Phương Thảo"
+date: "10/1/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1. Không sử dụng số để encoding các nominal data, trừ khi có lí do cụ thể. Lí do cho việc này là bởi: Thứ nhất, dễ mắc sai lầm khi phân tích dữ liệu do R sẽ cho rằng biến nominal data có thứ tự. Thứ hai, khi khảo sẽ dễ dàng hơn khi sử dụng kí tự để encode. Ví dụ, sử dụng `PT` thay vì số `1` để encode cho `Phương Thảo` sẽ dễ nhớ và khó nhầm lẫn hơn. 
+
+2. Sử dụng chữ hoa để viết tắt cho nominal data. Ví dụ: xã An Hảo sẽ được encode = kí tự 'AH'
+

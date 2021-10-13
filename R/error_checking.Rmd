@@ -1,0 +1,30 @@
+---
+title: "Error checking"
+author: "Phạm Phương Thảo"
+date: "10/13/2021"
+output: word_document
+---
+
+```{r setup, include=FALSE, message=F, error=F, warning=F, echo=F}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+**Chỉ dẫn**
+
+# est_year
+
+file: `model.xlsx`
+
+Kiểm tra lỗi ở các `idMODEL`: 5, 55
+
+# lợi nhuận, thu, chi
+
+tiêu chí lọc: 
+
+- các model có lợi nhuận/ha lớn hơn 50 triệu
+
+- các model không có giá trị năng suất nhưng lại có lợi nhuận
+
+file: `model_info.xlsx`
+
+Kiểm tra lỗi ở các `idMODEL`: 4  9 14 18 26 27 29 43 61 68 72 74 85 91  3  7 12 21 36 42 47 51 53 59 76 90  2 13 55 60 67 82 89 30 52 62

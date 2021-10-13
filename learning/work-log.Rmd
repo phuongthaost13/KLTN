@@ -1,0 +1,112 @@
+---
+title: "Log"
+author: "Phạm Phương Thảo"
+date: "10/1/2021"
+output: html_document
+---
+
+**01102021**
+
+# Excel data cleaning
+
+Dưới đây là một số thay đổi thực hiện trực tiếp lên file .csv sử dụng Microsoft Excel:
+
+## columns cleaning
+
+**Nội dung**: thay đổi tên, loại bỏ một số cột không phù hợp và thay đổi cách mã hóa thông tin cho một số cột.
+
+**Tiêu chuẩn đặt tên**:
+
+- không viết hoa chữ đầu
+
+- ngăn cách bằng dấu _
+
+- nếu có thể hãy dùng từ tiếng Anh
+
+- ngắn gọn
+
+*Cần tạo một file datasetsINFO để chú giải cho tên gọi**
+
+**rename**
+
+ID -> id
+
+ma_huyen -> idh
+
+ma_xa -> idx
+
+man -> male
+
+ethnic -> eth
+
+taogiao -> relig
+
+hocvan -> edu
+
+nhankhau -> fm_mem
+
+laodong -> wactive
+
+lamdongNN -> wagri
+
+kinhnghiem -> wyear
+
+thoi gian -> fulltime
+
+thu_nhap -> incAgri
+
+phantramtn -> percentT
+
+Tongdientich -> areaT
+
+dtdatnlkh -> areaNLKH
+
+dtdatln -> areaLN
+
+dttang -> areaStt
+
+dientichgiam -> area_change
+
+
+**remove**
+
+HO: không phải là biến, sử dụng id để truy xuất
+
+ans: không phải là biến, sử dụng id để truy xuất
+
+idh: sử dụng huyen
+
+idx: sử dụng xa
+
+U column is a duplicated column of 'income' column
+
+nguonnuoc_note
+
+unitPl1M1: không cần có cột đơn vị này. Có thể truy xuất đơn vị trong bảng unit
+
+**changing coding**
+
+giới tính: male=1, female=0
+
+area_change: nếu diện tích giảm sử dụng số âm, nếu diện tích tăng sử dụng số dương
+
+## rows cleaning
+
+**remove**
+
+c(93,94,95): no information displayed rows
+
+## comment
+
+Quan hệ với chủ hộ: vợ và vợ chủ hộ có khác nhau hay không
+
+thu nhập 2018: đây là thu nhật từ nông nghiệp hay từ tổng thu nhập
+
+Cột X (8a. Lý do tăng/giảm): hàng 2, giá trị 1.5 không tồn tại 
+
+Cột AK2 (đơn vị của cây chính 1): Tại sao có một số ô không ghi đơn vị?
+
+Thiếu cột: nhóm cây chính 2, đơn vị cây chính 2
+
+cột AQ2, AR2, AS2: dữ liệu bị nhầm cột, tất cả đều sai.
+
