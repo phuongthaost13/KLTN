@@ -15,7 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 file: `model.xlsx`
 
-Kiểm tra lỗi ở các `idMODEL`: 5, 55
+Kiểm tra lỗi ở cột est_year của các `idMODEL`: 5, 55
 
 # lợi nhuận, thu, chi
 
