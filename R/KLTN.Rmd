@@ -1,0 +1,101 @@
+---
+title: "KLTN-frontier-model"
+author: "Phạm Phương Thảo"
+date: "10/20/2021"
+output: word_document
+---
+
+```{r setup, include=FALSE, message=F, warning=F}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+**Mô hình giới hạn biên ngẫu nhiên Cobb-Douglas**
+
+**Ước lượng**
+
+Chúng ta có thể sử dụng lệnh `sfa` từ package `frontier` để ước lượng hàm giới hạn biên ngẫu nhiên. 
+Lệnh `sfa` ước lượng hàm sản xuất giới hạn biên ngẫu nhiên Cobb-Douglas với giả định rằng u tuân theo phân phối nửa chuẩn dương.
+Trong ví dụ bên dưới đây, chúng ta sẽ sử dụng tập dữ liệu `riceProdPhil` được tích hợp sẵn trong package `frontier` để thực hiện việc phân tích.
+
+```{r, echo=T, warning=FALSE, message=FALSE}
+library("frontier")
+```
+
+```{r, echo=TRUE}
+data("riceProdPhil")
+
+Cobb_Douglas <- sfa(log(PROD) ~ log(AREA) + log(LABOR) + log(NPK), data = riceProdPhil)
+summary(Cobb_Douglas, extraPar = TRUE)
+```
+Kết quả từ bảng trên có thể được hiểu như sau:
+
+- Estimate của `log(AREA)`, `log(LABOR)`, `log(NPK)`: là tham số của các biến AREA, LABOR và NPK. 
+Các giá trị đều mang số dương và có ý nghĩa về mặt thống kê (với mức ý nghĩa 0.01) chứng tỏ khi tăng lượng đầu vào ở các yếu tố này, lượng đầu ra cũng sẽ tăng.
+
+- Estimate sigmaSq (): bằng tổng của phương sai u và phương sai v
+
+- Estimate gamma (): 
+
+- Estmate gammaVar (): cho biết phương sai từ giá trị không hiệu quả đóng góp bao nhiêu vào tổng phương sai
+
+Xem Henningsen (2018) để biết thêm cách tính các giá trị tham số khác có trong bảng kết quả. Tuy nhiên, các tham số khác không đề cập không có nhiều ý nghĩa trong việc giải thích cho mô hình.
+
+**Phân tích các yếu tố ảnh hưởng đến hiệu quả kĩ thuật**
+
+Trong rất nhiều trường hợp thực nghiệm, lượng đầu ra không những chỉ phụ thuộc vào lượng đầu vào mà còn phụ thuộc vào một số biến khác không xuất hiện trong quá trình sản xuất. 
+TUy vậy, các biến này vẫn có ảnh hưởng đến đầu ra.
+Một số ví dụ cho các biến như vậy có thể kể đến như chất lượng đất đai, nước tưới, trình độ học vấn hay kinh nghiệm làm nông của người nông dân.
+Ta gọi các yếu tố này là các biến z.
+Các biến z được đưa vào hàm sản xuất biên ngẫu nhiên dưới dạng những biến có ảnh hưởng đến yếu tố hiệu quả kĩ thuật.
+Hay nói cách khác, yếu tố kĩ thuật u sẽ là hàm của z, với giả định 
+
+   dfdf
+
+trong đó, 
+
+  
+```{r, echo=TRUE}
+Cobb_Douglas_with_z <- sfa(log(PROD) ~ log(AREA) + log(LABOR) + log(NPK) | EDYRS + AGE , data = riceProdPhil)
+summary(Cobb_Douglas_with_z, extraPar = F)
+```
+
+**Xác định hiệu quả kĩ thuật cho từng nông hộ**
+
+Cho đến hiện tại, chúng ta đã tìm được rất nhiều các biến số đầu vào có ảnh hưởng đến kết quả đầu ra trong mô hình giới hạn biên ngẫu nhiên.
+Chúng ta cũng biết được yếu tố ngoại sinh nào có ảnh hưởng đến hiệu quả kĩ thuật.
+Tuy nhiên, mục đích cốt yếu khi sử dụng mô hình này đó chính là việc có thể tính toán được hiệu quả kĩ thuật của từng nông hộ.
+Hiệu quả kĩ thuật riêng rẽ có thể được tính toán bằng lệnh sau:
+
+```{r, echo=TRUE}
+head(efficiencies(Cobb_Douglas_with_z), 10)
+```
+
+Có tổng cộng 344 nông hộ trong tập dữ liệu nhưng để ngắn gọn cho việc trình bày kết quả, chúng ta sử dụng lệnh `head` để xem 10 dòng đầu tiên của bảng kết quả.
+
+**Mô hình giới hạn biên ngẫu nhiên translog**
+
+Ngoài hàm Cobb-Douglas, mô hình phân tích giới hạn biên ngẫu nhiên còn có thể được sử dụng ở nhiều dạng khác, trong đó có dạng translog (dạng bậc hai theo logarit). 
+
+Trong ta cũng thế thể dễ dàng sử dụng lệnh `frontierQuad` của package `frontier` để phân tích tương tự như với lệnh `sfa`.
+
+```{r, eval=FALSE}
+data("riceProdPhil")
+riceProdPhil$logPROD  <- log(riceProdPhil$PROD)
+riceProdPhil$logAREA <- log(riceProdPhil$AREA)
+riceProdPhil$logLABOR  <- log(riceProdPhil$LABOR)
+riceProdPhil$logNPK  <- log(riceProdPhil$NPK)
+
+# estimate the translog function
+translog <- frontierQuad(yName = "logPROD",
+                         xNames = c( "logAREA", "logLABOR","logNPK"),
+                         data= riceProdPhil)
+translog
+
+# estimate the same model using sfa()
+  # translog2 <- sfa( logOutput ~ logCapital + logLabour
+  #    + I( 0.5 * logCapital^2 ) + I( logCapital * logLabour )
+    #  + I( 0.5 * logLabour^2 ), data = front41Data )
+  # translog2
+ #  all.equal( coef( translog ), coef( translog2 ),
+     # check.attributes = FALSE )
+```
